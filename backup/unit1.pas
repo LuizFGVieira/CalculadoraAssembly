@@ -129,7 +129,6 @@ end;
 procedure TForm1.ButtonEqualClick(Sender: TObject);
 var s, aux:string;
 var cont, pcont: integer;
-var kkk : Integer;
 
 var
   arrN : array[0..1000] of real;
@@ -137,23 +136,25 @@ var
   arrO : array[0..100] of string;
 begin
      pcont := 1;
+     aux := '';
      s := EditVisor.Text;
      for cont := 1 to length(s) do
      begin
-          if( (s[cont] <> '+') or (s[cont] <> '-') )then
+          if( (s[cont] = '+') or (s[cont] = '-') )then
           begin
-               aux := aux + s[cont];
+
+               arrN[pcont] := StrToFloat(aux);
+               arrO[pcont] := s[cont];
+               pcont := pcont + 1;
+               aux := '';
+
           end
           else begin
-               //kkk := StrToInt(aux);
-               arrN[pcont] := StrToFloat(s[1..cont]);
-               //arrO[pcont] := s[cont];
-               //pcont := pcont + 1;
-               //aux := '';
+               aux := aux + s[cont];
           end;
      end;
      cont := 1;
-     EditVisor.Text := FloatToStr(arrN[pcont]);
+     EditVisor.Text := arrO[pcont-1];
 end;
 
 end.
