@@ -127,35 +127,106 @@ begin
 end;
 
 procedure TForm1.ButtonEqualClick(Sender: TObject);
-var s, aux:string;
-var cont, pcont: integer;
 
-var
-  arrN : array[0..1000] of real;
-var
-  arrO : array[0..100] of string;
+const max = 100;
+type  pilha = record
+      obj : array[1..max] of string;
+      j : integer;
+end;
+
+procedure criar ( var p: pilha); // cria a pilha
+   begin
+       p.j := 0;
+   end;
+procedure push(var p:pilha; ob: string); // adiciona elementos na pilha
+  begin
+      p.j := p.j + 1;
+      p.obj[p.j] := ob;
+  end;
+function pop (var p: pilha):string;  // retira os elementos da pilha
+  begin
+    pop := p.obj[p.j];
+    p.j:= p.j-1;
+  end;
+function vazia(var p: pilha):boolean; // indica se a pilha está vazia
+  begin
+     if p.j = 0 then
+        vazia:= true
+     else
+         vazia := false;
+  end;
+var svisor, saux:string; // String do visor da calculadora e String auxiliar
+var i: integer; // Inteiro para contagem
+var op1, op2, r: real; // operadores e resultado
+var p1, p2: pilha; // p1: Pilha de Valores e p2: Pilha de operações
+
 begin
-     pcont := 1;
-     aux := '';
-     s := EditVisor.Text;
-     for cont := 1 to length(s) do
+     criar(p1); //Criando Pilha 1
+     criar(p2); //Criando Pilha 2
+
+     // Iniciailizando Variáveis
+     r := 0;
+     saux := '';
+     svisor := EditVisor.Text + '=';
+
+     //BLOCO DE FATIAMENTO DA STRING DO VISOR (SEPARAÇÃO DE OPERANDO E OPERADOR)
+     for i := 1 to length(svisor) do
      begin
-          if( (s[cont] = '+') or (s[cont] = '-') )then
+          //Verificando se o caractere do visor corresponde a uma operação
+          if( (svisor[i] = '+') or (svisor[i] = '-') or (svisor[i] = '='))then
           begin
-
-               arrN[pcont] := StrToFloat(aux);
-               arrO[pcont] := s[cont];
-               pcont := pcont + 1;
-               aux := '';
-
+               push(p1, saux); // Carregando valor da String auxiliar na pilha 1
+               push(p2, svisor[i]); // Carregando operação na pilha 2
+               saux := ''; // resetando String Auxiliar
           end
           else begin
-               aux := aux + s[cont];
+               saux := saux + svisor[i]; // Concatenando digitos na String Auxiliar
           end;
+
      end;
-     cont := 1;
-     EditVisor.Text := FloatToStr(arrN[pcont-1]);
+     //FIM DO BLOCO DE FATIAMENTO -----------------------------------------
+
+     repeat
+       saux := pop(p2); // carrega a operação na String Auxiliar
+       if( saux = '+') then // Verifica se é uma Soma a ser realizada
+       begin
+            op2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+            op1 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
+            {$ASMMODE intel}
+            asm
+               finit //Inicia a FPU
+               fld op1 //Carrega o op1 na pilha
+               fld op2 //Carrega o op1 na pilha
+               fadd //Soma os dos valores
+               fstp r //Retorna o resultado
+            end;
+            saux := FloatToStr(r); //Converte o resultado para String
+            push(p1, saux); // Carrega o resultado na pilha de valores
+       end
+       else if ( saux = '-') then begin // Verifica se é uma Subtração a ser realizada
+            op2 := StrToFloat(pop(p1)); // Busca da Pilha de valores o operando 1
+            op1 := StrToFloat(pop(p1)); // Busca da Pilha de valores o operando 2
+            {$ASMMODE intel}
+            asm
+               finit //Inicia a FPU
+               fld op1 //Carrega o op1 na pilha
+               fld op2 //Carrega o op1 na pilha
+               fsub //Soma os dos valores
+               fstp r //Retorna o resultado
+            end;
+            saux := FloatToStr(r); //Converte o resultado para String
+            push(p1, saux); // Carrega o resultado na pilha de valores
+       end;
+     until (vazia(p2)= true); // repete até que a pilha esteja vazia
+
+EditVisor.Text := pop(p1);//Mostra o Resultado
+
+
+
 end;
+
+
+
 
 end.
 
