@@ -95,6 +95,7 @@ object Form1: TForm1
     Top = 200
     Width = 42
     Caption = ','
+    OnClick = ButtonVClick
     TabOrder = 9
   end
   object Button0: TButton

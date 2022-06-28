@@ -1,5 +1,7 @@
 unit Unit1;
 
+//----- INÍCIO DO CODIGO DO LAZARUS PARA A GERAÇÃO DO FORMULÁRIO
+
 {$mode objfpc}{$H+}
 
 interface
@@ -45,6 +47,7 @@ type
     procedure ButtonAddClick(Sender: TObject);
     procedure ButtonEqualClick(Sender: TObject);
     procedure ButtonSubClick(Sender: TObject);
+    procedure ButtonVClick(Sender: TObject);
   private
 
   public
@@ -60,72 +63,82 @@ implementation
 
 { TForm1 }
 
+//------ FIM DO CODIGO DO LAZARUS PARA GERAÇÃO DO FORMULÁRIO
+
+// FUNÇOES DOS BOTOES
 procedure TForm1.Button1Click(Sender: TObject);
 
 begin
-     EditVisor.Text := EditVisor.Text + '1';
+     EditVisor.Text := EditVisor.Text + '1'; // CONCATENANDO '1' AO PRESSIONAR
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '2';
+     EditVisor.Text := EditVisor.Text + '2'; // CONCATENANDO '2' AO PRESSIONAR
 end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '3';
+     EditVisor.Text := EditVisor.Text + '3'; // CONCATENANDO '3' AO PRESSIONAR
 end;
 
 procedure TForm1.Button4Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '4';
+     EditVisor.Text := EditVisor.Text + '4'; // CONCATENANDO '4' AO PRESSIONAR
 end;
 
 procedure TForm1.Button5Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '5';
+     EditVisor.Text := EditVisor.Text + '5'; // CONCATENANDO '5' AO PRESSIONAR
 end;
 
 procedure TForm1.Button6Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '6';
+     EditVisor.Text := EditVisor.Text + '6'; // CONCATENANDO '6' AO PRESSIONAR
 end;
 
 procedure TForm1.Button7Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '7';
+     EditVisor.Text := EditVisor.Text + '7'; // CONCATENANDO '7' AO PRESSIONAR
 end;
 
 procedure TForm1.Button8Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '8';
+     EditVisor.Text := EditVisor.Text + '8'; // CONCATENANDO '8' AO PRESSIONAR
 end;
 
 procedure TForm1.Button9Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '9';
+     EditVisor.Text := EditVisor.Text + '9'; // CONCATENANDO '9' AO PRESSIONAR
 end;
 
 procedure TForm1.Button0Click(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '0';
+     EditVisor.Text := EditVisor.Text + '0'; // CONCATENANDO '0' AO PRESSIONAR
 end;
 
 procedure TForm1.ButtonACClick(Sender: TObject);
 begin
-     EditVisor.Text := '';
+     EditVisor.Text := ''; // LIMPANDO VISOR
 end;
 
 procedure TForm1.ButtonAddClick(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '+';
+     EditVisor.Text := EditVisor.Text + '+'; // CONCATENANDO '+' AO PRESSIONAR
 end;
 
 procedure TForm1.ButtonSubClick(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + '-';
+     EditVisor.Text := EditVisor.Text + '-'; // CONCATENANDO '-' AO PRESSIONAR
 end;
 
+procedure TForm1.ButtonVClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + ','; // CONCATENANDO ',' AO PRESSIONAR
+end;
+
+
+// FUNÇÃO REFERENTE AO BOTÃO '='
 procedure TForm1.ButtonEqualClick(Sender: TObject);
 
 const max = 100;

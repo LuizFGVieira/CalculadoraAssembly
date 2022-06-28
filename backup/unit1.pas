@@ -45,6 +45,7 @@ type
     procedure ButtonAddClick(Sender: TObject);
     procedure ButtonEqualClick(Sender: TObject);
     procedure ButtonSubClick(Sender: TObject);
+    procedure ButtonVClick(Sender: TObject);
   private
 
   public
@@ -126,6 +127,11 @@ begin
      EditVisor.Text := EditVisor.Text + '-';
 end;
 
+procedure TForm1.ButtonVClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + ',';
+end;
+
 procedure TForm1.ButtonEqualClick(Sender: TObject);
 
 const max = 100;
@@ -203,9 +209,9 @@ begin
             saux := FloatToStr(r); //Converte o resultado para String
             push(p1, saux); // Carrega o resultado na pilha de valores
        end
-       else if ( saux = '-') then begin
-            op2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
-            op1 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
+       else if ( saux = '-') then begin // Verifica se é uma Subtração a ser realizada
+            op2 := StrToFloat(pop(p1)); // Busca da Pilha de valores o operando 1
+            op1 := StrToFloat(pop(p1)); // Busca da Pilha de valores o operando 2
             {$ASMMODE intel}
             asm
                finit //Inicia a FPU
