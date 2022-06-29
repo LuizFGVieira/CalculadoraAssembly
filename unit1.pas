@@ -141,8 +141,8 @@ end;
 // FUNÇÃO REFERENTE AO BOTÃO '='
 procedure TForm1.ButtonEqualClick(Sender: TObject);
 
-const max = 100;
-type  pilha = record
+const max = 100; //Tamanho Maximo da pilha
+type  pilha = record // Criando tipo pilha
       obj : array[1..max] of string;
       j : integer;
 end;
@@ -168,6 +168,7 @@ function vazia(var p: pilha):boolean; // indica se a pilha está vazia
      else
          vazia := false;
   end;
+
 var svisor, saux:string; // String do visor da calculadora e String auxiliar
 var i: integer; // Inteiro para contagem
 var op1, op2, r: real; // operadores e resultado
@@ -183,20 +184,31 @@ begin
      svisor := EditVisor.Text + '=';
 
      //BLOCO DE FATIAMENTO DA STRING DO VISOR (SEPARAÇÃO DE OPERANDO E OPERADOR)
-     for i := 1 to length(svisor) do
+     for i := length(svisor) downto 1 do // for varrendo do ultimo caractere digitado até o primeiro
      begin
           //Verificando se o caractere do visor corresponde a uma operação
-          if( (svisor[i] = '+') or (svisor[i] = '-') or (svisor[i] = '='))then
+          if( svisor[i] = '+')then
           begin
                push(p1, saux); // Carregando valor da String auxiliar na pilha 1
                push(p2, svisor[i]); // Carregando operação na pilha 2
                saux := ''; // resetando String Auxiliar
           end
-          else begin
-               saux := saux + svisor[i]; // Concatenando digitos na String Auxiliar
+          else if(svisor[i] = '-') then //If para converter subtração em adição
+          begin
+
+               if(i<>1)then push(p2, '+'); // Carregando operação na pilha 2
+
+               saux := '-'+saux; // Concatenando sinal na string auxiliar
+               push(p1, saux); // Carregando valor da String auxiliar na pilha 1
+               saux := ''; // resetando String Auxiliar
+          end
+          else if(svisor[i] <> '=') then begin
+               saux := svisor[i] + saux; // Concatenando digitos na String Auxiliar
           end;
 
      end;
+     if(saux <> '') then push(p1, saux); // Carregando valor da String auxiliar na pilha 1
+
      //FIM DO BLOCO DE FATIAMENTO -----------------------------------------
 
      repeat
@@ -223,8 +235,8 @@ begin
             asm
                finit //Inicia a FPU
                fld op1 //Carrega o op1 na pilha
-               fld op2 //Carrega o op1 na pilha
-               fsub //Soma os dos valores
+               fld op2 //Carrega o op2 na pilha
+               fsub //Subtrai os dos valores
                fstp r //Retorna o resultado
             end;
             saux := FloatToStr(r); //Converte o resultado para String
