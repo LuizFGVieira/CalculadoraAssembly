@@ -15,14 +15,31 @@ type
 
   TForm1 = class(TForm)
     Button1: TButton;
+    Button10: TButton;
+    Button11: TButton;
+    Button12: TButton;
+    Button13: TButton;
+    Button14: TButton;
+    Button15: TButton;
+    ButtonRP: TButton;
+    ButtonLP: TButton;
+    ButtonTan: TButton;
+    ButtonCos: TButton;
+    ButtonSin: TButton;
+    ButtonBack: TButton;
+    ButtonCE: TButton;
+    ButtonPi: TButton;
+    ButtonMul: TButton;
+    ButtonDiv: TButton;
+    ButtonMS: TButton;
     ButtonV: TButton;
     Button0: TButton;
     ButtonSub: TButton;
     ButtonAdd: TButton;
     ButtonEqual: TButton;
-    Button15: TButton;
-    Button16: TButton;
-    Button17: TButton;
+    ButtonMC: TButton;
+    ButtonM: TButton;
+    ButtonMR: TButton;
     ButtonAC: TButton;
     Button2: TButton;
     Button3: TButton;
@@ -32,7 +49,15 @@ type
     Button7: TButton;
     Button8: TButton;
     Button9: TButton;
+    CheckBox1: TCheckBox;
     EditVisor: TEdit;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioGroup1: TRadioGroup;
+    procedure ButtonDivClick(Sender: TObject);
+    procedure ButtonMCClick(Sender: TObject);
+    procedure ButtonMClick(Sender: TObject);
+    procedure ButtonMRClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -46,8 +71,10 @@ type
     procedure ButtonACClick(Sender: TObject);
     procedure ButtonAddClick(Sender: TObject);
     procedure ButtonEqualClick(Sender: TObject);
+    procedure ButtonPiClick(Sender: TObject);
     procedure ButtonSubClick(Sender: TObject);
     procedure ButtonVClick(Sender: TObject);
+    procedure ButtonMulClick(Sender: TObject);
   private
 
   public
@@ -70,6 +97,26 @@ procedure TForm1.Button1Click(Sender: TObject);
 
 begin
      EditVisor.Text := EditVisor.Text + '1'; // CONCATENANDO '1' AO PRESSIONAR
+end;
+
+procedure TForm1.ButtonMCClick(Sender: TObject);
+begin
+
+end;
+
+procedure TForm1.ButtonDivClick(Sender: TObject);
+begin
+  EditVisor.Text := EditVisor.Text + '/'; // CONCATENANDO '/' AO PRESSIONAR
+end;
+
+procedure TForm1.ButtonMClick(Sender: TObject);
+begin
+
+end;
+
+procedure TForm1.ButtonMRClick(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -125,6 +172,11 @@ end;
 procedure TForm1.ButtonAddClick(Sender: TObject);
 begin
      EditVisor.Text := EditVisor.Text + '+'; // CONCATENANDO '+' AO PRESSIONAR
+end;
+
+procedure TForm1.ButtonMulClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + '*'; // CONCATENANDO '*' AO PRESSIONAR
 end;
 
 procedure TForm1.ButtonSubClick(Sender: TObject);
@@ -193,7 +245,7 @@ begin
                push(p2, svisor[i]); // Carregando operação na pilha 2
                saux := ''; // resetando String Auxiliar
           end
-          else if(svisor[i] = '-') then
+          else if(svisor[i] = '-') then //If para converter subtração em adição
           begin
 
                if(i<>1)then push(p2, '+'); // Carregando operação na pilha 2
@@ -247,6 +299,11 @@ begin
 EditVisor.Text := pop(p1);//Mostra o Resultado
 
 
+
+end;
+
+procedure TForm1.ButtonPiClick(Sender: TObject);
+begin
 
 end;
 

@@ -1,25 +1,25 @@
 object Form1: TForm1
-  Left = 612
-  Height = 250
-  Top = 197
-  Width = 401
+  Left = 251
+  Height = 285
+  Top = 158
+  Width = 354
   Caption = 'Form1'
-  ClientHeight = 250
-  ClientWidth = 401
+  ClientHeight = 285
+  ClientWidth = 354
   LCLVersion = '2.2.2.0'
   object Button1: TButton
-    Left = 24
+    Left = 84
     Height = 40
-    Top = 80
+    Top = 200
     Width = 42
     Caption = '1'
     OnClick = Button1Click
     TabOrder = 0
   end
   object Button2: TButton
-    Left = 64
+    Left = 124
     Height = 40
-    Top = 80
+    Top = 200
     Width = 42
     Caption = '2'
     Color = clHighlight
@@ -27,118 +27,118 @@ object Form1: TForm1
     TabOrder = 1
   end
   object Button3: TButton
-    Left = 104
+    Left = 164
     Height = 40
-    Top = 80
+    Top = 200
     Width = 42
     Caption = '3'
     OnClick = Button3Click
     TabOrder = 2
   end
   object Button4: TButton
-    Left = 24
+    Left = 84
     Height = 40
-    Top = 120
+    Top = 160
     Width = 42
     Caption = '4'
     OnClick = Button4Click
     TabOrder = 3
   end
   object Button5: TButton
-    Left = 64
+    Left = 124
     Height = 40
-    Top = 120
+    Top = 160
     Width = 42
     Caption = '5'
     OnClick = Button5Click
     TabOrder = 4
   end
   object Button6: TButton
-    Left = 104
+    Left = 164
     Height = 40
-    Top = 120
+    Top = 160
     Width = 42
     Caption = '6'
     OnClick = Button6Click
     TabOrder = 5
   end
   object Button7: TButton
-    Left = 24
+    Left = 84
     Height = 40
-    Top = 160
+    Top = 120
     Width = 42
     Caption = '7'
     OnClick = Button7Click
     TabOrder = 6
   end
   object Button8: TButton
-    Left = 64
+    Left = 124
     Height = 40
-    Top = 160
+    Top = 120
     Width = 42
     Caption = '8'
     OnClick = Button8Click
     TabOrder = 7
   end
   object Button9: TButton
-    Left = 104
+    Left = 164
     Height = 40
-    Top = 160
+    Top = 120
     Width = 42
     Caption = '9'
     OnClick = Button9Click
     TabOrder = 8
   end
   object ButtonV: TButton
-    Left = 24
+    Left = 84
     Height = 40
-    Top = 200
+    Top = 240
     Width = 42
     Caption = ','
     OnClick = ButtonVClick
     TabOrder = 9
   end
   object Button0: TButton
-    Left = 64
+    Left = 124
     Height = 40
-    Top = 200
-    Width = 82
+    Top = 240
+    Width = 42
     Caption = '0'
     OnClick = Button0Click
     TabOrder = 10
   end
   object ButtonSub: TButton
-    Left = 147
+    Left = 204
     Height = 40
-    Top = 80
+    Top = 160
     Width = 42
     Caption = '-'
     OnClick = ButtonSubClick
     TabOrder = 11
   end
   object ButtonAdd: TButton
-    Left = 147
+    Left = 204
     Height = 40
-    Top = 120
+    Top = 200
     Width = 42
     Caption = '+'
     OnClick = ButtonAddClick
     TabOrder = 12
   end
   object ButtonEqual: TButton
-    Left = 147
-    Height = 80
-    Top = 160
+    Left = 204
+    Height = 40
+    Top = 240
     Width = 42
     Caption = '='
     OnClick = ButtonEqualClick
     TabOrder = 13
   end
   object EditVisor: TEdit
-    Left = 24
+    Left = 4
     Height = 33
-    Top = 7
-    Width = 165
+    Top = 4
+    Width = 333
     Color = clWhite
     Font.CharSet = ANSI_CHARSET
     Font.Height = -19
@@ -147,34 +147,238 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 14
   end
-  object Button15: TButton
-    Left = 24
+  object ButtonMC: TButton
+    Left = 44
     Height = 40
-    Top = 40
+    Top = 80
     Width = 42
+    Caption = 'MC'
+    OnClick = ButtonMCClick
     TabOrder = 15
   end
-  object Button16: TButton
-    Left = 64
+  object ButtonM: TButton
+    Left = 164
     Height = 40
-    Top = 40
+    Top = 80
     Width = 42
+    Caption = 'M+'
+    OnClick = ButtonMClick
     TabOrder = 16
   end
-  object Button17: TButton
-    Left = 104
+  object ButtonMR: TButton
+    Left = 84
     Height = 40
-    Top = 40
+    Top = 80
     Width = 42
+    Caption = 'MR'
+    OnClick = ButtonMRClick
     TabOrder = 17
   end
   object ButtonAC: TButton
-    Left = 147
+    Left = 84
+    Height = 40
+    Top = 40
+    Width = 82
+    Caption = 'C'
+    OnClick = ButtonACClick
+    TabOrder = 18
+  end
+  object ButtonMS: TButton
+    Left = 124
+    Height = 40
+    Top = 80
+    Width = 42
+    Caption = 'MS'
+    OnClick = ButtonMRClick
+    TabOrder = 19
+  end
+  object ButtonDiv: TButton
+    Left = 204
+    Height = 40
+    Top = 80
+    Width = 42
+    Caption = '÷'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -16
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnClick = ButtonDivClick
+    ParentFont = False
+    TabOrder = 20
+  end
+  object ButtonMul: TButton
+    Left = 204
+    Height = 40
+    Top = 120
+    Width = 42
+    Caption = '×'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -16
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnClick = ButtonMulClick
+    ParentFont = False
+    TabOrder = 21
+  end
+  object ButtonPi: TButton
+    Left = 164
+    Height = 40
+    Top = 240
+    Width = 42
+    Caption = 'Pi'
+    OnClick = ButtonPiClick
+    TabOrder = 22
+  end
+  object ButtonCE: TButton
+    Left = 164
     Height = 40
     Top = 40
     Width = 42
-    Caption = 'AC'
-    OnClick = ButtonACClick
-    TabOrder = 18
+    Caption = 'CE'
+    TabOrder = 23
+  end
+  object ButtonBack: TButton
+    Left = 204
+    Height = 40
+    Top = 40
+    Width = 42
+    Caption = '↩'
+    TabOrder = 24
+  end
+  object ButtonSin: TButton
+    Left = 44
+    Height = 40
+    Top = 120
+    Width = 42
+    Caption = 'sin'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    TabOrder = 25
+  end
+  object ButtonCos: TButton
+    Left = 44
+    Height = 40
+    Top = 160
+    Width = 42
+    Caption = 'cos'
+    TabOrder = 26
+  end
+  object ButtonTan: TButton
+    Left = 44
+    Height = 40
+    Top = 200
+    Width = 42
+    Caption = 'tan'
+    TabOrder = 27
+  end
+  object Button10: TButton
+    Left = 44
+    Height = 40
+    Top = 240
+    Width = 42
+    Caption = '√x'
+    TabOrder = 28
+  end
+  object Button11: TButton
+    Left = 4
+    Height = 40
+    Top = 200
+    Width = 42
+    Caption = 'x²'
+    TabOrder = 29
+  end
+  object Button12: TButton
+    Left = 4
+    Height = 40
+    Top = 240
+    Width = 42
+    Caption = 'x^y'
+    TabOrder = 30
+  end
+  object Button13: TButton
+    Left = 4
+    Height = 40
+    Top = 160
+    Width = 42
+    Caption = 'log'
+    TabOrder = 31
+  end
+  object Button14: TButton
+    Left = 4
+    Height = 40
+    Top = 120
+    Width = 42
+    Caption = 'ln'
+    TabOrder = 32
+  end
+  object Button15: TButton
+    Left = 4
+    Height = 40
+    Top = 80
+    Width = 42
+    Caption = 'n!'
+    TabOrder = 33
+  end
+  object ButtonLP: TButton
+    Left = 4
+    Height = 40
+    Top = 40
+    Width = 42
+    Caption = '('
+    TabOrder = 34
+  end
+  object ButtonRP: TButton
+    Left = 44
+    Height = 40
+    Top = 40
+    Width = 42
+    Caption = ')'
+    TabOrder = 35
+  end
+  object CheckBox1: TCheckBox
+    Left = 256
+    Height = 19
+    Top = 96
+    Width = 60
+    Caption = 'Inverter'
+    TabOrder = 36
+  end
+  object RadioGroup1: TRadioGroup
+    Left = 256
+    Height = 105
+    Top = 120
+    Width = 86
+    AutoFill = True
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 85
+    ClientWidth = 82
+    TabOrder = 37
+    object RadioButton1: TRadioButton
+      Left = 6
+      Height = 43
+      Top = 0
+      Width = 70
+      Caption = 'Graus'
+      Checked = True
+      TabOrder = 1
+      TabStop = True
+    end
+    object RadioButton2: TRadioButton
+      Left = 6
+      Height = 42
+      Top = 43
+      Width = 70
+      Caption = 'Radianos'
+      TabOrder = 0
+    end
   end
 end
