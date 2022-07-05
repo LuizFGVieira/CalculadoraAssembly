@@ -50,6 +50,7 @@ type
     Button8: TButton;
     Button9: TButton;
     CheckBox1: TCheckBox;
+    Edit1: TEdit;
     EditVisor: TEdit;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
@@ -222,81 +223,120 @@ function vazia(var p: pilha):boolean; // indica se a pilha está vazia
   end;
 
 var svisor, saux:string; // String do visor da calculadora e String auxiliar
-var i: integer; // Inteiro para contagem
+var i, j: integer; // Inteiro para contagem
 var op1, op2, r: real; // operadores e resultado
 var p1, p2: pilha; // p1: Pilha de Valores e p2: Pilha de operações
+var lista : array[0..max] of string;
 
 begin
      criar(p1); //Criando Pilha 1
      criar(p2); //Criando Pilha 2
 
      // Iniciailizando Variáveis
+     j := 0;
      r := 0;
      saux := '';
      svisor := EditVisor.Text + '=';
 
      //BLOCO DE FATIAMENTO DA STRING DO VISOR (SEPARAÇÃO DE OPERANDO E OPERADOR)
-     for i := length(svisor) downto 1 do // for varrendo do ultimo caractere digitado até o primeiro
+     for i := 1 to length(svisor) do // for varrendo do ultimo caractere digitado até o primeiro
      begin
           //Verificando se o caractere do visor corresponde a uma operação
           if( svisor[i] = '+')then
           begin
-               push(p1, saux); // Carregando valor da String auxiliar na pilha 1
-               push(p2, svisor[i]); // Carregando operação na pilha 2
+               lista[j] := saux; // Carregando valor da String auxiliar na Lista
+               j := j + 1; // Incrementando indice do array
+               if(vazia(p1) <> true) then
+               begin
+                 repeat
+                       saux := pop(p1);
+                       if((saux = '+') or (saux = '-')) then
+                       begin
+                            lista[j] := saux;
+                            j := j + 1;
+                       end
+                       else begin
+                           push(p1, saux);
+                           saux := ''; // resetando String Auxiliar
+                       end;
+
+                 until ((saux <> '') or (vazia(p1) <> true));
+               end;
+
+               push(p1, svisor[i]); // Carregando operação na pilha
                saux := ''; // resetando String Auxiliar
+
           end
-          else if(svisor[i] = '-') then //If para converter subtração em adição
+          else if(svisor[i] = '-') then
           begin
 
-               if(i<>1)then push(p2, '+'); // Carregando operação na pilha 2
+               lista[j] := saux; // Carregando valor da String auxiliar na Lista
+               j := j + 1; // Incrementando indice do array
+               if(vazia(p1) <> true) then
+               begin
+                 repeat
+                       saux := pop(p1);
+                       if((saux = '+') or (saux = '-') or (saux = '/') or (saux = '*') or (saux = '^') or (saux = '~')) then
+                       begin
+                            lista[j] := saux;
+                            j := j + 1;
+                       end
+                       else begin
+                           push(p1, saux);
+                           saux := ''; // resetando String Auxiliar
+                       end;
 
-               saux := '-'+saux; // Concatenando sinal na string auxiliar
-               push(p1, saux); // Carregando valor da String auxiliar na pilha 1
+                 until (saux <> '');
+               end;
+
+
+               push(p1, svisor[i]); // Carregando operação na pilha
+               saux := ''; // resetando String Auxiliar
+          end
+          else if(svisor[i] = '*') then
+          begin
+               lista[j] := saux; // Carregando valor da String auxiliar na Lista
+               j := j + 1; // Incrementando indice do array
+               if(vazia(p1) <> true) then
+               begin
+                 repeat
+                       saux := pop(p1);
+                       if((saux = '/') or (saux = '*') or (saux = '^') or (saux = '~')) then
+                       begin
+                            lista[j] := saux;
+                            j := j + 1;
+                       end
+                       else begin
+                           push(p1, saux);
+                           saux := ''; // resetando String Auxiliar
+                       end;
+
+                 until (saux <> '');
+               end;
+
+
+               push(p1, svisor[i]); // Carregando operação na pilha
                saux := ''; // resetando String Auxiliar
           end
           else if(svisor[i] <> '=') then begin
-               saux := svisor[i] + saux; // Concatenando digitos na String Auxiliar
+               saux := saux +svisor[i]; // Concatenando digitos na String Auxiliar
           end;
 
      end;
+
      if(saux <> '') then push(p1, saux); // Carregando valor da String auxiliar na pilha 1
+     while (vazia(p1) <> true) do
+     begin
+          lista[j] := pop(p1);
+          j := j + 1;
+     end;
 
      //FIM DO BLOCO DE FATIAMENTO -----------------------------------------
+     EditVisor.Text := '';
+     for j := 0 to 10 do EditVisor.Text := EditVisor.Text + ' ' + lista[j];//Mostra o Resultado
 
-     repeat
-       saux := pop(p2); // carrega a operação na String Auxiliar
-       if( saux = '+') then // Verifica se é uma Soma a ser realizada
-       begin
-            op2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
-            op1 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
-            {$ASMMODE intel}
-            asm
-               finit //Inicia a FPU
-               fld op1 //Carrega o op1 na pilha
-               fld op2 //Carrega o op1 na pilha
-               fadd //Soma os dos valores
-               fstp r //Retorna o resultado
-            end;
-            saux := FloatToStr(r); //Converte o resultado para String
-            push(p1, saux); // Carrega o resultado na pilha de valores
-       end
-       else if ( saux = '-') then begin // Verifica se é uma Subtração a ser realizada
-            op2 := StrToFloat(pop(p1)); // Busca da Pilha de valores o operando 1
-            op1 := StrToFloat(pop(p1)); // Busca da Pilha de valores o operando 2
-            {$ASMMODE intel}
-            asm
-               finit //Inicia a FPU
-               fld op1 //Carrega o op1 na pilha
-               fld op2 //Carrega o op2 na pilha
-               fsub //Subtrai os dos valores
-               fstp r //Retorna o resultado
-            end;
-            saux := FloatToStr(r); //Converte o resultado para String
-            push(p1, saux); // Carrega o resultado na pilha de valores
-       end;
-     until (vazia(p2)= true); // repete até que a pilha esteja vazia
 
-EditVisor.Text := pop(p1);//Mostra o Resultado
+
 
 
 
