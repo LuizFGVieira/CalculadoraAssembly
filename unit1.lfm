@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 251
+  Left = 339
   Height = 285
-  Top = 158
-  Width = 612
+  Top = 164
+  Width = 347
   Caption = 'Form1'
   ClientHeight = 285
-  ClientWidth = 612
+  ClientWidth = 347
   LCLVersion = '2.2.2.0'
   object Button1: TButton
     Left = 84
@@ -380,13 +380,5 @@ object Form1: TForm1
       Caption = 'Radianos'
       TabOrder = 0
     end
-  end
-  object Edit1: TEdit
-    Left = 454
-    Height = 23
-    Top = 135
-    Width = 80
-    TabOrder = 38
-    Text = 'Edit1'
   end
 end

@@ -50,7 +50,6 @@ type
     Button8: TButton;
     Button9: TButton;
     CheckBox1: TCheckBox;
-    Edit1: TEdit;
     EditVisor: TEdit;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
@@ -225,43 +224,50 @@ function vazia(var p: pilha):boolean; // indica se a pilha está vazia
 var svisor, saux:string; // String do visor da calculadora e String auxiliar
 var i, j: integer; // Inteiro para contagem
 var op1, op2, r: real; // operadores e resultado
-var p1, p2: pilha; // p1: Pilha de Valores e p2: Pilha de operações
+var p1: pilha; // p1: Pilha de operações
 var lista : array[0..max] of string;
+var precedencia : boolean;
 
 begin
      criar(p1); //Criando Pilha 1
-     criar(p2); //Criando Pilha 2
 
      // Iniciailizando Variáveis
      j := 0;
      r := 0;
      saux := '';
      svisor := EditVisor.Text + '=';
+     precedencia := false;
 
      //BLOCO DE FATIAMENTO DA STRING DO VISOR (SEPARAÇÃO DE OPERANDO E OPERADOR)
      for i := 1 to length(svisor) do // for varrendo do ultimo caractere digitado até o primeiro
      begin
           //Verificando se o caractere do visor corresponde a uma operação
-          if( svisor[i] = '+')then
+          if((i = 1) and ((svisor[i] = '+') or (svisor[i] = '-'))) then begin
+               saux := 'Syntax ERROR !!!';
+               push(p1, saux);
+               lista[0] := 'ERROR';
+               break;
+          end
+          else if( svisor[i] = '+')then
           begin
                lista[j] := saux; // Carregando valor da String auxiliar na Lista
                j := j + 1; // Incrementando indice do array
-               if(vazia(p1) <> true) then
-               begin
-                 repeat
-                       saux := pop(p1);
-                       if((saux = '+') or (saux = '-')) then
-                       begin
-                            lista[j] := saux;
-                            j := j + 1;
-                       end
-                       else begin
-                           push(p1, saux);
-                           saux := ''; // resetando String Auxiliar
-                       end;
+               repeat
+                 if(vazia(p1))then
+                 begin
+                      break;
+                 end
 
-                 until ((saux <> '') or (vazia(p1) <> true));
-               end;
+                 else saux := pop(p1);
+
+                 if((saux = '+') or (saux = '-') or (saux = '/') or (saux = '*')) then
+                 begin
+                      precedencia := true;
+                      lista[j] := saux;
+                      j := j + 1;
+                 end
+                 else precedencia := false;
+               until(precedencia = false);
 
                push(p1, svisor[i]); // Carregando operação na pilha
                saux := ''; // resetando String Auxiliar
@@ -295,47 +301,60 @@ begin
           end
           else if(svisor[i] = '*') then
           begin
+
                lista[j] := saux; // Carregando valor da String auxiliar na Lista
                j := j + 1; // Incrementando indice do array
-               if(vazia(p1) <> true) then
-               begin
-                 repeat
-                       saux := pop(p1);
-                       if((saux = '/') or (saux = '*') or (saux = '^') or (saux = '~')) then
-                       begin
-                            lista[j] := saux;
-                            j := j + 1;
-                       end
-                       else begin
-                           push(p1, saux);
-                           saux := ''; // resetando String Auxiliar
-                       end;
+               repeat
+                 if(vazia(p1))then
+                 begin
+                      break;
+                 end
 
-                 until (saux <> '');
-               end;
+                 else begin
+                   saux := pop(p1);
+                   if((saux = '/') or (saux = '*')) then
+                   begin
+                        precedencia := true;
+                        lista[j] := saux;
+                        j := j + 1;
+                   end
+                   else begin
+                        precedencia := false;
+                        push(p1, saux);
+                   end;
+                 end;
 
+
+               until(precedencia = false);
 
                push(p1, svisor[i]); // Carregando operação na pilha
                saux := ''; // resetando String Auxiliar
           end
-          else if(svisor[i] <> '=') then begin
-               saux := saux +svisor[i]; // Concatenando digitos na String Auxiliar
+          else if(svisor[i] = '=') then begin
+
+
+
+
+          end
+          else begin
+               saux := saux + svisor[i]; // Concatenando digitos na String Auxiliar
           end;
 
      end;
-
-     if(saux <> '') then push(p1, saux); // Carregando valor da String auxiliar na pilha 1
-     while (vazia(p1) <> true) do
-     begin
-          lista[j] := pop(p1);
-          j := j + 1;
-     end;
-
+      //if(saux <> '') then push(p1, saux); // Carregando valor da String auxiliar na pilha 1
+               //push(p1, saux);
+               //while (vazia(p1) <> true) do
+              // repeat
+                    lista[j] := pop(p1);
+                    j := j + 1;
+              // until (vazia(p1) <> true);
+               lista[j] := pop(p1);
+               j := j + 1;
      //FIM DO BLOCO DE FATIAMENTO -----------------------------------------
+
+
      EditVisor.Text := '';
-     for j := 0 to 10 do EditVisor.Text := EditVisor.Text + ' ' + lista[j];//Mostra o Resultado
-
-
+     for j := 0 to 10 do EditVisor.Text := EditVisor.Text+lista[j];//Mostra o Resultado
 
 
 
