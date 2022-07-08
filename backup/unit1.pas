@@ -49,11 +49,7 @@ type
     Button7: TButton;
     Button8: TButton;
     Button9: TButton;
-    CheckBox1: TCheckBox;
     EditVisor: TEdit;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
-    RadioGroup1: TRadioGroup;
     procedure ButtonDivClick(Sender: TObject);
     procedure ButtonMCClick(Sender: TObject);
     procedure ButtonMClick(Sender: TObject);
@@ -280,6 +276,22 @@ var x1, x2 : real;
     end;
     multiplicacao := x1;
   end;
+
+function divisao(): real;  // --> DIVISÃO <--
+var x1, x2 : real;
+  begin
+    x1 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+    x2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
+    {$ASMMODE intel}
+    asm
+       finit //Inicia a FPU
+       fld x1 //Carrega o op1 na pilha
+       fld x2 //Carrega o op2 na pilha
+       fdivr //Soma os dois valores
+       fstp x1 //Retorna o resultado
+    end;
+    divisao := x1;
+  end;
 begin
      criar(p1); //Criando Pilha 1
 
@@ -415,6 +427,43 @@ begin
                saux := ''; // resetando String Auxiliar
           end
 
+// ========================================== Operador / ============================================
+          else if(svisor[i] = '/') then
+          begin
+
+               lista[j] := saux; // Carregando valor da String auxiliar na Lista
+               j := j + 1; // Incrementando indice do array
+
+               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
+               repeat
+                 if(vazia(p1))then // Verificando se a pilha está vazia
+                 begin
+                      break; // Saindo do laço
+                 end
+
+                 else begin
+
+                   saux := pop(p1); // carregando topo da pilha na string auxiliar
+
+                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
+                   if((saux = '/') or (saux = '*')) then
+                   begin
+                        precedencia := true; //Setando variável de precedência
+                        lista[j] := saux; // Carregando string Auxiliar na pilha
+                        j := j + 1; // Incrementando indice do array
+                   end
+                   else begin
+                        precedencia := false; // Setando false na variável de precedencia
+                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
+                   end;
+                 end;
+
+               until(precedencia = false);
+               // Fim do Laço ----------------
+
+               push(p1, svisor[i]); // Carregando operação na pilha
+               saux := ''; // resetando String Auxiliar
+          end
 // ========================================== Operador = ============================================
           else if(svisor[i] = '=') then begin
 
@@ -457,6 +506,9 @@ begin
           end
           else if(lista[j] = '*') then begin
                push(p1, FloatToStr(multiplicacao())); // Carrega o resultado na pilha de valores
+          end
+          else if(lista[j] = '/') then begin
+               push(p1, FloatToStr(divisao())); // Carrega o resultado na pilha de valores
           end
           else if(lista[j] <> '') then begin
                push(p1, lista[j]);

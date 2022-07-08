@@ -49,11 +49,7 @@ type
     Button7: TButton;
     Button8: TButton;
     Button9: TButton;
-    CheckBox1: TCheckBox;
     EditVisor: TEdit;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
-    RadioGroup1: TRadioGroup;
     procedure ButtonDivClick(Sender: TObject);
     procedure ButtonMCClick(Sender: TObject);
     procedure ButtonMClick(Sender: TObject);
