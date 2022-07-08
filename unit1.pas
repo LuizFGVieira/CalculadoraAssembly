@@ -21,6 +21,8 @@ type
     Button13: TButton;
     Button14: TButton;
     Button15: TButton;
+    Button16: TButton;
+    Button17: TButton;
     ButtonRP: TButton;
     ButtonLP: TButton;
     ButtonTan: TButton;
@@ -50,7 +52,9 @@ type
     Button8: TButton;
     Button9: TButton;
     EditVisor: TEdit;
+    procedure ButtonBackClick(Sender: TObject);
     procedure ButtonDivClick(Sender: TObject);
+    procedure ButtonLPClick(Sender: TObject);
     procedure ButtonMCClick(Sender: TObject);
     procedure ButtonMClick(Sender: TObject);
     procedure ButtonMRClick(Sender: TObject);
@@ -68,6 +72,7 @@ type
     procedure ButtonAddClick(Sender: TObject);
     procedure ButtonEqualClick(Sender: TObject);
     procedure ButtonPiClick(Sender: TObject);
+    procedure ButtonRPClick(Sender: TObject);
     procedure ButtonSubClick(Sender: TObject);
     procedure ButtonVClick(Sender: TObject);
     procedure ButtonMulClick(Sender: TObject);
@@ -89,11 +94,6 @@ implementation
 //------ FIM DO CODIGO DO LAZARUS PARA GERAÇÃO DO FORMULÁRIO
 
 // FUNÇOES DOS BOTOES
-procedure TForm1.Button1Click(Sender: TObject);
-
-begin
-     EditVisor.Text := EditVisor.Text + '1'; // CONCATENANDO '1' AO PRESSIONAR
-end;
 
 procedure TForm1.ButtonMCClick(Sender: TObject);
 begin
@@ -105,6 +105,22 @@ begin
   EditVisor.Text := EditVisor.Text + '/'; // CONCATENANDO '/' AO PRESSIONAR
 end;
 
+procedure TForm1.ButtonBackClick(Sender: TObject);
+
+begin
+
+end;
+
+procedure TForm1.ButtonLPClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + '('; // CONCATENANDO '(' AO PRESSIONAR
+end;
+
+procedure TForm1.ButtonRPClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + ')'; // CONCATENANDO ')' AO PRESSIONAR
+end;
+
 procedure TForm1.ButtonMClick(Sender: TObject);
 begin
 
@@ -113,6 +129,11 @@ end;
 procedure TForm1.ButtonMRClick(Sender: TObject);
 begin
 
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + '1'; // CONCATENANDO '1' AO PRESSIONAR
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -183,6 +204,11 @@ end;
 procedure TForm1.ButtonVClick(Sender: TObject);
 begin
      EditVisor.Text := EditVisor.Text + ','; // CONCATENANDO ',' AO PRESSIONAR
+end;
+
+procedure TForm1.ButtonPiClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + 'π'; // CONCATENANDO PI AO PRESSIONAR
 end;
 
 
@@ -464,6 +490,43 @@ begin
                push(p1, svisor[i]); // Carregando operação na pilha
                saux := ''; // resetando String Auxiliar
           end
+
+// ========================================== ABRE PARÊNTESES ============================================
+          else if( svisor[i] = '(')then
+          begin
+               if(saux <> '') then
+               begin
+                    lista[j] := saux; // Carregando valor da String auxiliar na Lista
+                    j := j + 1; // Incrementando indice do arra
+               end;
+
+               push(p1, svisor[i]); // Carregando operação na pilha
+               saux := ''; // resetando String Auxiliar
+          end
+
+// ========================================== FECHA PARÊNTESES ============================================
+          else if(svisor[i] = ')') then
+          begin
+
+               lista[j] := saux; // Carregando valor da String auxiliar na Lista
+               j := j + 1; // Incrementando indice do array
+
+               // Laço para carregar operadores da pilha na Lista até o parênteses
+               saux := pop(p1);
+               while (saux <> '(') do
+               begin
+                  lista[j] := saux;
+                  j := j + 1;
+                  saux := pop(p1);
+               end;
+               saux := ''; // resetando String Auxiliar
+          end
+
+// ========================================== PI π ============================================
+          else if( svisor[i] = 'π')then
+          begin
+               saux := '3.14159265359';
+          end
 // ========================================== Operador = ============================================
           else if(svisor[i] = '=') then begin
 
@@ -516,17 +579,11 @@ begin
       end;
 
 //FIM DO BLOCO DE OPERAÇÕES ---------------------------------------
-
+     //EditVisor.Text := '';
+     //for j := 0 to max do EditVisor.Text := EditVisor.Text+lista[j]; // Exibindo resultado
      EditVisor.Text := pop(p1); // Exibindo resultado
 
 end;
-
-procedure TForm1.ButtonPiClick(Sender: TObject);
-begin
-
-end;
-
-
 
 
 end.
