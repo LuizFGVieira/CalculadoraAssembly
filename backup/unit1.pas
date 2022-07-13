@@ -22,26 +22,24 @@ type
     Button14: TButton;
     Button15: TButton;
     Button16: TButton;
-    Button17: TButton;
+    Button18: TButton;
+    Button19: TButton;
+    Button20: TButton;
+    Button21: TButton;
     ButtonRP: TButton;
     ButtonLP: TButton;
     ButtonTan: TButton;
     ButtonCos: TButton;
     ButtonSin: TButton;
     ButtonBack: TButton;
-    ButtonCE: TButton;
     ButtonPi: TButton;
     ButtonMul: TButton;
     ButtonDiv: TButton;
-    ButtonMS: TButton;
     ButtonV: TButton;
     Button0: TButton;
     ButtonSub: TButton;
     ButtonAdd: TButton;
     ButtonEqual: TButton;
-    ButtonMC: TButton;
-    ButtonM: TButton;
-    ButtonMR: TButton;
     ButtonAC: TButton;
     Button2: TButton;
     Button3: TButton;
@@ -51,8 +49,14 @@ type
     Button7: TButton;
     Button8: TButton;
     Button9: TButton;
+    CheckBox1: TCheckBox;
     EditVisor: TEdit;
+    procedure Button10Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure Button12Click(Sender: TObject);
+    procedure Button18Click(Sender: TObject);
     procedure ButtonBackClick(Sender: TObject);
+    procedure ButtonCosClick(Sender: TObject);
     procedure ButtonDivClick(Sender: TObject);
     procedure ButtonLPClick(Sender: TObject);
     procedure ButtonMCClick(Sender: TObject);
@@ -73,9 +77,12 @@ type
     procedure ButtonEqualClick(Sender: TObject);
     procedure ButtonPiClick(Sender: TObject);
     procedure ButtonRPClick(Sender: TObject);
+    procedure ButtonSinClick(Sender: TObject);
     procedure ButtonSubClick(Sender: TObject);
+    procedure ButtonTanClick(Sender: TObject);
     procedure ButtonVClick(Sender: TObject);
     procedure ButtonMulClick(Sender: TObject);
+    procedure CheckBox1Change(Sender: TObject);
   private
 
   public
@@ -111,6 +118,31 @@ begin
 
 end;
 
+procedure TForm1.ButtonCosClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + ButtonCos.Caption + '('; // CONCATENANDO TEXTO DO BOTÃO AO PRESSIONAR
+end;
+
+procedure TForm1.Button10Click(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + '√'; // CONCATENANDO '√' AO PRESSIONAR
+end;
+
+procedure TForm1.Button11Click(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + '^2'; // CONCATENANDO '^2' AO PRESSIONAR
+end;
+
+procedure TForm1.Button12Click(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + '^'; // CONCATENANDO '^' AO PRESSIONAR
+end;
+
+procedure TForm1.Button18Click(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + 'r'; // CONCATENANDO 'r' AO PRESSIONAR
+end;
+
 procedure TForm1.ButtonLPClick(Sender: TObject);
 begin
      EditVisor.Text := EditVisor.Text + '('; // CONCATENANDO '(' AO PRESSIONAR
@@ -119,6 +151,11 @@ end;
 procedure TForm1.ButtonRPClick(Sender: TObject);
 begin
      EditVisor.Text := EditVisor.Text + ')'; // CONCATENANDO ')' AO PRESSIONAR
+end;
+
+procedure TForm1.ButtonSinClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + ButtonSin.Caption + ' '; // CONCATENANDO TEXTO DO BOTÃO AO PRESSIONAR
 end;
 
 procedure TForm1.ButtonMClick(Sender: TObject);
@@ -196,9 +233,29 @@ begin
      EditVisor.Text := EditVisor.Text + '*'; // CONCATENANDO '*' AO PRESSIONAR
 end;
 
+procedure TForm1.CheckBox1Change(Sender: TObject);
+begin
+     if(CheckBox1.Checked = true) then
+     begin
+          ButtonSin.Caption:='arc sin';
+          ButtonCos.Caption:='arc cos';
+          ButtonTan.Caption:='arc tan';
+     end
+     else begin
+          ButtonSin.Caption:='sin';
+          ButtonCos.Caption:='cos';
+          ButtonTan.Caption:='tan';
+     end;
+end;
+
 procedure TForm1.ButtonSubClick(Sender: TObject);
 begin
      EditVisor.Text := EditVisor.Text + '-'; // CONCATENANDO '-' AO PRESSIONAR
+end;
+
+procedure TForm1.ButtonTanClick(Sender: TObject);
+begin
+     EditVisor.Text := EditVisor.Text + ButtonTan.Caption + '('; // CONCATENANDO TEXTO DO BOTÃO AO PRESSIONAR
 end;
 
 procedure TForm1.ButtonVClick(Sender: TObject);
@@ -208,7 +265,7 @@ end;
 
 procedure TForm1.ButtonPiClick(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + 'pi'; // CONCATENANDO PI AO PRESSIONAR
+     EditVisor.Text := EditVisor.Text + FloatToStr(pi); // CONCATENANDO PI AO PRESSIONAR
 end;
 
 
@@ -318,6 +375,62 @@ var x1, x2 : real;
     end;
     divisao := x1;
   end;
+
+function potencia(): real;  // --> POTENCIAÇÃO <--
+var x1, x2, r : real;
+  begin
+    x1 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+    x2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
+
+    {$ASMMODE intel}
+    asm
+       finit
+       fld x1 // carrega x1 na pilha
+       fld x2 // carrega x2 na pilha
+       fyl2x // faz 1/r * log na base 2 de x1
+       fld st // duplica o topo
+       frndint // trunca
+       fsub st(1), st // extrai a parte fracionária
+       fxch // inverte a ordem na pilha
+       f2xm1 // faz 2 ^ st -1
+       fld1 // Carrega 1 na pilha
+       fadd // soma 1
+       fscale // faz st * 2 ^ parte inteira de st1
+       fstp r // carrega o topo em r
+    end;
+
+
+    potencia := r;
+  end;
+
+function raiz(): real;  // --> RAIZ <--
+var x1, x2, r : real;
+  begin
+    x1 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+    r := StrToFloat(pop(p1));// Busca da Pilha de valores a raiz
+
+
+    {$ASMMODE intel}
+    asm
+       finit
+       fld r // carrega r na pilha
+       fld1 // carrega 1 na pilha
+       fdivr // faz 1/r
+       fld x1 // carrega x1 na pilha
+       fyl2x // faz 1/r * log na base 2 de x1
+       fld st // duplica o topo
+       frndint // trunca
+       fsub st(1), st // extrai a parte fracionária
+       fxch // inverte a ordem na pilha
+       f2xm1 // faz 2 ^ st -1
+       fld1 // Carrega 1 na pilha
+       fadd // soma 1
+       fscale // faz st * 2 ^ parte inteira de st1
+       fstp r // carrega o topo em r
+    end;
+
+    raiz := r;
+  end;
 begin
      criar(p1); //Criando Pilha 1
 
@@ -338,6 +451,15 @@ begin
                lista[0] := 'ERROR';
                break;
           end
+
+// ========================================== Operador Trigonométrico ============================================
+          else if((saux = 'sin') or (saux = 'arc sin'))then
+                begin
+
+                     push(p1, saux); // Carregando operação na pilha
+                     saux := svisor[i]; // resetando String Auxiliar
+
+                end
 
 // ========================================== Operador + ============================================
           else if( svisor[i] = '+')then
@@ -491,6 +613,81 @@ begin
                saux := ''; // resetando String Auxiliar
           end
 
+// ========================================== Operador ^ ============================================
+          else if( svisor[i] = '^')then
+          begin
+               lista[j] := saux; // Carregando valor da String auxiliar na Lista
+               j := j + 1; // Incrementando indice do array
+
+               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
+               repeat
+                 if(vazia(p1))then // Verificando se a pilha está vazia
+                 begin
+                      break; // Saindo do laço
+                 end
+
+                 else begin
+
+                   saux := pop(p1); // carregando topo da pilha na string auxiliar
+
+                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
+                   if(saux = '^') then
+                   begin
+                        precedencia := true; //Setando variável de precedência
+                        lista[j] := saux; // Carregando string Auxiliar na pilha
+                        j := j + 1; // Incrementando indice do array
+                   end
+                   else begin
+                        precedencia := false; // Setando false na variável de precedencia
+                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
+                   end;
+                 end;
+
+               until(precedencia = false);
+               // Fim do Laço ----------------
+
+               push(p1, svisor[i]); // Carregando operação na pilha
+               saux := ''; // resetando String Auxiliar
+
+          end
+
+// ========================================== Operador r ============================================
+          else if( svisor[i] = 'r')then
+          begin
+               lista[j] := saux; // Carregando valor da String auxiliar na Lista
+               j := j + 1; // Incrementando indice do array
+
+               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
+               repeat
+                 if(vazia(p1))then // Verificando se a pilha está vazia
+                 begin
+                      break; // Saindo do laço
+                 end
+
+                 else begin
+
+                   saux := pop(p1); // carregando topo da pilha na string auxiliar
+
+                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
+                   if(saux = 'r') then
+                   begin
+                        precedencia := true; //Setando variável de precedência
+                        lista[j] := saux; // Carregando string Auxiliar na pilha
+                        j := j + 1; // Incrementando indice do array
+                   end
+                   else begin
+                        precedencia := false; // Setando false na variável de precedencia
+                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
+                   end;
+                 end;
+
+               until(precedencia = false);
+               // Fim do Laço ----------------
+
+               push(p1, svisor[i]); // Carregando operação na pilha
+               saux := ''; // resetando String Auxiliar
+
+          end
 // ========================================== ABRE PARÊNTESES ============================================
           else if( svisor[i] = '(')then
           begin
@@ -523,7 +720,7 @@ begin
           end
 
 // ========================================== PI π ============================================
-          else if( svisor[i] = 'pi')then
+          else if( svisor[i] = 'π')then
           begin
                saux := '3.14159265359';
           end
@@ -572,6 +769,12 @@ begin
           end
           else if(lista[j] = '/') then begin
                push(p1, FloatToStr(divisao())); // Carrega o resultado na pilha de valores
+          end
+          else if(lista[j] = '^') then begin
+               push(p1, FloatToStr(potencia())); // Carrega o resultado na pilha de valores
+          end
+          else if(lista[j] = 'r') then begin
+               push(p1, FloatToStr(raiz())); // Carrega o resultado na pilha de valores
           end
           else if(lista[j] <> '') then begin
                push(p1, lista[j]);

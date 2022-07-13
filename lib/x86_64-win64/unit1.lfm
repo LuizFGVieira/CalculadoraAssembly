@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 674
+  Left = 678
   Height = 433
-  Top = 193
+  Top = 163
   Width = 351
   Caption = 'Form1'
   ClientHeight = 433
@@ -148,33 +148,6 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 14
   end
-  object ButtonMC: TButton
-    Left = 58
-    Height = 43
-    Top = 157
-    Width = 59
-    Caption = 'MC'
-    OnClick = ButtonMCClick
-    TabOrder = 15
-  end
-  object ButtonM: TButton
-    Left = 232
-    Height = 43
-    Top = 157
-    Width = 59
-    Caption = 'M+'
-    OnClick = ButtonMClick
-    TabOrder = 16
-  end
-  object ButtonMR: TButton
-    Left = 116
-    Height = 43
-    Top = 157
-    Width = 59
-    Caption = 'MR'
-    OnClick = ButtonMRClick
-    TabOrder = 17
-  end
   object ButtonAC: TButton
     Left = 116
     Height = 43
@@ -182,16 +155,7 @@ object Form1: TForm1
     Width = 118
     Caption = 'C'
     OnClick = ButtonACClick
-    TabOrder = 18
-  end
-  object ButtonMS: TButton
-    Left = 174
-    Height = 43
-    Top = 157
-    Width = 59
-    Caption = 'MS'
-    OnClick = ButtonMRClick
-    TabOrder = 19
+    TabOrder = 15
   end
   object ButtonDiv: TButton
     Left = 290
@@ -205,7 +169,7 @@ object Form1: TForm1
     Font.Quality = fqDraft
     OnClick = ButtonDivClick
     ParentFont = False
-    TabOrder = 20
+    TabOrder = 16
   end
   object ButtonMul: TButton
     Left = 290
@@ -219,7 +183,7 @@ object Form1: TForm1
     Font.Quality = fqDraft
     OnClick = ButtonMulClick
     ParentFont = False
-    TabOrder = 21
+    TabOrder = 17
   end
   object ButtonPi: TButton
     Left = 233
@@ -228,61 +192,57 @@ object Form1: TForm1
     Width = 59
     Caption = 'π'
     OnClick = ButtonPiClick
-    TabOrder = 22
+    TabOrder = 18
   end
-  object ButtonCE: TButton
+  object ButtonBack: TButton
     Left = 233
     Height = 43
     Top = 112
-    Width = 59
-    Caption = 'CE'
-    TabOrder = 23
-  end
-  object ButtonBack: TButton
-    Left = 290
-    Height = 43
-    Top = 112
-    Width = 59
+    Width = 116
     Caption = '↩'
     OnClick = ButtonBackClick
-    TabOrder = 24
+    TabOrder = 19
   end
   object ButtonSin: TButton
     Left = 58
     Height = 43
-    Top = 199
+    Top = 157
     Width = 59
     Caption = 'sin'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
+    OnClick = ButtonSinClick
     ParentFont = False
-    TabOrder = 25
+    TabOrder = 20
   end
   object ButtonCos: TButton
     Left = 58
     Height = 43
-    Top = 241
+    Top = 199
     Width = 59
     Caption = 'cos'
-    TabOrder = 26
+    OnClick = ButtonCosClick
+    TabOrder = 21
   end
   object ButtonTan: TButton
     Left = 58
     Height = 43
-    Top = 283
+    Top = 241
     Width = 59
     Caption = 'tan'
-    TabOrder = 27
+    OnClick = ButtonTanClick
+    TabOrder = 22
   end
   object Button10: TButton
     Left = 58
     Height = 43
-    Top = 325
+    Top = 283
     Width = 59
     Caption = '√x'
-    TabOrder = 28
+    OnClick = Button10Click
+    TabOrder = 23
   end
   object Button11: TButton
     Left = 0
@@ -290,7 +250,8 @@ object Form1: TForm1
     Top = 283
     Width = 59
     Caption = 'x²'
-    TabOrder = 29
+    OnClick = Button11Click
+    TabOrder = 24
   end
   object Button12: TButton
     Left = 0
@@ -298,7 +259,8 @@ object Form1: TForm1
     Top = 325
     Width = 59
     Caption = 'x^y'
-    TabOrder = 30
+    OnClick = Button12Click
+    TabOrder = 25
   end
   object Button13: TButton
     Left = 0
@@ -306,7 +268,7 @@ object Form1: TForm1
     Top = 241
     Width = 59
     Caption = 'log'
-    TabOrder = 31
+    TabOrder = 26
   end
   object Button14: TButton
     Left = 0
@@ -314,7 +276,7 @@ object Form1: TForm1
     Top = 199
     Width = 59
     Caption = 'ln'
-    TabOrder = 32
+    TabOrder = 27
   end
   object Button15: TButton
     Left = 0
@@ -322,7 +284,7 @@ object Form1: TForm1
     Top = 157
     Width = 59
     Caption = 'n!'
-    TabOrder = 33
+    TabOrder = 28
   end
   object ButtonLP: TButton
     Left = 0
@@ -331,7 +293,7 @@ object Form1: TForm1
     Width = 59
     Caption = '('
     OnClick = ButtonLPClick
-    TabOrder = 34
+    TabOrder = 29
   end
   object ButtonRP: TButton
     Left = 58
@@ -340,20 +302,55 @@ object Form1: TForm1
     Width = 59
     Caption = ')'
     OnClick = ButtonRPClick
-    TabOrder = 35
+    TabOrder = 30
   end
   object Button16: TButton
     Left = 0
     Height = 64
     Top = 368
     Width = 349
-    TabOrder = 36
+    TabOrder = 31
   end
-  object Button17: TButton
-    Left = 0
-    Height = 56
-    Top = 56
-    Width = 349
-    TabOrder = 37
+  object Button18: TButton
+    Left = 58
+    Height = 43
+    Top = 325
+    Width = 59
+    Caption = 'yraizx'
+    OnClick = Button18Click
+    TabOrder = 32
+  end
+  object Button19: TButton
+    Left = 116
+    Height = 43
+    Top = 157
+    Width = 59
+    Caption = '1/x'
+    TabOrder = 33
+  end
+  object Button20: TButton
+    Left = 174
+    Height = 43
+    Top = 157
+    Width = 59
+    Caption = 'e'
+    TabOrder = 34
+  end
+  object Button21: TButton
+    Left = 232
+    Height = 43
+    Top = 157
+    Width = 59
+    Caption = 'e^x'
+    TabOrder = 35
+  end
+  object CheckBox1: TCheckBox
+    Left = 8
+    Height = 19
+    Top = 72
+    Width = 36
+    Caption = 'Inv'
+    OnChange = CheckBox1Change
+    TabOrder = 36
   end
 end
