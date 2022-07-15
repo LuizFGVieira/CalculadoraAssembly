@@ -21,7 +21,6 @@ type
     Button13: TButton;
     Button14: TButton;
     Button15: TButton;
-    Button16: TButton;
     Button18: TButton;
     Button19: TButton;
     Button20: TButton;
@@ -50,7 +49,10 @@ type
     Button8: TButton;
     Button9: TButton;
     CheckBox1: TCheckBox;
+    CheckBoxPolish: TCheckBox;
     EditVisor: TEdit;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
     procedure Button10Click(Sender: TObject);
     procedure Button11Click(Sender: TObject);
     procedure Button12Click(Sender: TObject);
@@ -155,7 +157,7 @@ end;
 
 procedure TForm1.ButtonSinClick(Sender: TObject);
 begin
-     EditVisor.Text := EditVisor.Text + ButtonSin.Caption + ' '; // CONCATENANDO TEXTO DO BOTÃO AO PRESSIONAR
+     EditVisor.Text := EditVisor.Text + ButtonSin.Caption + '('; // CONCATENANDO TEXTO DO BOTÃO AO PRESSIONAR
 end;
 
 procedure TForm1.ButtonMClick(Sender: TObject);
@@ -280,12 +282,20 @@ type  pilha = record // Criando tipo pilha
 end;
 
 var svisor, saux:string; // String do visor da calculadora e String auxiliar
-var i, j: integer; // Inteiro para contagem
+var i, j, nivel: integer; // Inteiro para contagem
 var op1, op2, r: real; // operadores e resultado
 var p1: pilha; // p1: Pilha de operações
 var lista : array[0..max] of string; // Lista para a organização da expreção em notação Polonesa
-var precedencia : boolean; // Indicador de Precedência
 
+//FUNÇÃO PARA VERIFICAR SE VALOR ESTÁ EM GRAUS OU RADIANOS E CONVERTER PARA RADIANOS
+function radiano(var x: real): real;  // --> GRAUS -> RADIANOS <--
+  begin
+    if(RadioButton1.Checked = true) then
+    begin
+         x := x * (pi/180);
+    end;
+    radiano := x;
+  end;
 
 //########### Funções de Pilha ##############
 procedure criar ( var p: pilha); // cria a pilha
@@ -310,6 +320,84 @@ function vazia(var p: pilha):boolean; // indica se a pilha está vazia
          vazia := false;
   end;
 
+//FUNÇÃO DE CÁLCULO DE PRECEDÊNCIA
+procedure precedencia(var nivel: integer);
+var prec : boolean; // Indicador de Precedência
+  begin
+       if(vazia(p1) = false)then // Verificando se a pilha está vazia
+       begin
+          // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
+          repeat
+
+             saux := pop(p1); // carregando topo da pilha na string auxiliar
+
+             // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
+
+             if(nivel <= 4) then
+             begin
+                  if((saux = '~') or (saux = 'sin') or (saux = 'cos') or (saux = 'tan')
+                  or (saux = 'arc tan') or (saux = 'arc cos') or (saux = 'arc sin')) then
+                  begin
+                    prec := true; //Setando variável de precedência
+                    lista[j] := saux; // Carregando string Auxiliar na pilha
+                    j := j + 1; // Incrementando indice do array
+                  end
+                  else begin
+                    prec := false; // Setando false na variável de precedencia
+                  end;
+             end
+             else if(nivel = 3) then
+             begin
+                if((saux = '^') or (saux = 'raiz') or (saux = '!') or(saux = '~')
+                or (saux = 'sin') or (saux = 'cos') or (saux = 'tan') or (saux = 'arc tan')
+                or (saux = 'arc cos') or (saux = 'arc sin')) then
+                  begin
+                    prec := true; //Setando variável de precedência
+                    lista[j] := saux; // Carregando string Auxiliar na pilha
+                    j := j + 1; // Incrementando indice do array
+                  end
+                else begin
+                    prec := false; // Setando false na variável de precedencia
+                end;
+             end
+             else if(nivel = 2) then
+             begin
+                if((saux = '*') or (saux = '/') or (saux = '^') or (saux = 'raiz') or (saux = '!') or(saux = '~')
+                or (saux = 'sin') or (saux = 'cos') or (saux = 'tan') or (saux = 'arc tan')
+                or (saux = 'arc cos') or (saux = 'arc sin')) then
+                  begin
+                    prec := true; //Setando variável de precedência
+                    lista[j] := saux; // Carregando string Auxiliar na pilha
+                    j := j + 1; // Incrementando indice do array
+                  end
+                else begin
+                    prec := false; // Setando false na variável de precedencia
+
+                end;
+             end
+             else if(nivel = 1) then
+             begin
+                if((saux = '+') or (saux = '-') or (saux = '*') or (saux = '/') or (saux = '^')
+                or (saux = 'raiz') or (saux = '!') or(saux = '~') or (saux = 'sin') or (saux = 'cos')
+                or (saux = 'tan') or (saux = 'arc tan') or (saux = 'arc cos') or (saux = 'arc sin')) then
+                  begin
+                    prec := true; //Setando variável de precedência
+                    lista[j] := saux; // Carregando string Auxiliar na pilha
+                    j := j + 1; // Incrementando indice do array
+                  end
+                else begin
+                    prec := false; // Setando false na variável de precedencia
+                end;
+             end;
+
+          until((prec = false) or vazia(p1));
+          push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
+          // Fim do Laço ----------------
+       end
+
+
+
+  end;
 //########### Funções das Operações em Assembly ##############
 
 function soma(): real;  // --> SOMA <--
@@ -319,7 +407,6 @@ var x1, x2 : real;
     x2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
     {$ASMMODE intel}
     asm
-       finit //Inicia a FPU
        fld x1 //Carrega o op1 na pilha
        fld x2 //Carrega o op2 na pilha
        fadd //Soma os dois valores
@@ -335,7 +422,6 @@ var x1, x2 : real;
     x2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
     {$ASMMODE intel}
     asm
-       finit //Inicia a FPU
        fld x1 //Carrega o op1 na pilha
        fld x2 //Carrega o op2 na pilha
        fsubr //Soma os dois valores
@@ -351,7 +437,6 @@ var x1, x2 : real;
     x2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
     {$ASMMODE intel}
     asm
-       finit //Inicia a FPU
        fld x1 //Carrega o op1 na pilha
        fld x2 //Carrega o op2 na pilha
        fmul //Soma os dois valores
@@ -367,7 +452,6 @@ var x1, x2 : real;
     x2 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 2
     {$ASMMODE intel}
     asm
-       finit //Inicia a FPU
        fld x1 //Carrega o op1 na pilha
        fld x2 //Carrega o op2 na pilha
        fdivr //Soma os dois valores
@@ -384,7 +468,6 @@ var x1, x2, r : real;
 
     {$ASMMODE intel}
     asm
-       finit
        fld x1 // carrega x1 na pilha
        fld x2 // carrega x2 na pilha
        fyl2x // faz 1/r * log na base 2 de x1
@@ -407,12 +490,12 @@ function raiz(): real;  // --> RAIZ <--
 var x1, x2, r : real;
   begin
     x1 := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+
     r := StrToFloat(pop(p1));// Busca da Pilha de valores a raiz
 
 
     {$ASMMODE intel}
     asm
-       finit
        fld r // carrega r na pilha
        fld1 // carrega 1 na pilha
        fdivr // faz 1/r
@@ -431,6 +514,54 @@ var x1, x2, r : real;
 
     raiz := r;
   end;
+
+function seno(): real;  // --> SENO <--
+var x : real;
+  begin
+
+    x := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+    x := radiano(x); // Converte x para radianos
+
+    {$ASMMODE intel}
+    asm
+       fld x //Carrega o op1 na pilha
+       fsin // Calcula o seno do topo
+       fstp x //Retorna o resultado
+    end;
+
+    seno := x;
+  end;
+
+function tangente(): real;  // --> TANGENTE <--
+var x : real;
+  begin
+    x := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+
+    {$ASMMODE intel}
+    asm
+       fld x //Carrega o op1 na pilha
+       fsincos // Calcula o seno e cosseno do topo
+       fdiv // Calcula tangente
+       fstp x //Retorna o resultado
+    end;
+    tangente := x;
+  end;
+
+function cosseno(): real;  // --> COSSENO <--
+var x : real;
+  begin
+    x := StrToFloat(pop(p1));// Busca da Pilha de valores o operando 1
+
+    {$ASMMODE intel}
+    asm
+       finit //Inicia a FPU
+       fld x //Carrega o op1 na pilha
+       fcos // Calcula o cosseno do topo
+       fstp x //Retorna o resultado
+    end;
+    cosseno := x;
+  end;
+
 begin
      criar(p1); //Criando Pilha 1
 
@@ -439,255 +570,64 @@ begin
      r := 0;
      saux := '';
      svisor := EditVisor.Text + '=';
-     precedencia := false;
 
 //BLOCO DE FATIAMENTO DA STRING DO VISOR (NOTAÇÃO POLONESA) -------------------------------
      for i := 1 to length(svisor) do // for varrendo do ultimo caractere digitado até o primeiro
      begin
-          //Verificando se o caractere do visor corresponde a uma operação
-          if((i = 1) and ((svisor[i] = '+') or (svisor[i] = '-'))) then begin
-               saux := 'Syntax ERROR !!!';
-               push(p1, saux);
-               lista[0] := 'ERROR';
-               break;
-          end
 
-// ========================================== Operador Trigonométrico ============================================
-          else if((saux = 'sin') or (saux = 'arc sin'))then
+// ========================================== Operadores Trigonométricos ============================================
+          if((saux = 'sin') or (saux = 'arc sin') or (saux = 'cos')
+          or (saux = 'arc cos') or (saux = 'tan') or (saux = 'arc tan'))then
                 begin
 
                      push(p1, saux); // Carregando operação na pilha
-                     saux := svisor[i]; // resetando String Auxiliar
+                     push(p1, svisor[i]); // resetando String Auxiliar
+                     saux := '';
 
                 end
 
-// ========================================== Operador + ============================================
-          else if( svisor[i] = '+')then
+// ========================================== Operadores + e - ============================================
+          else if((svisor[i] = '+') or (svisor[i] = '-'))then
           begin
                lista[j] := saux; // Carregando valor da String auxiliar na Lista
                j := j + 1; // Incrementando indice do array
 
-               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
-               repeat
-                 if(vazia(p1))then // Verificando se a pilha está vazia
-                 begin
-                      break; // Saindo do laço
-                 end
-
-                 else begin
-
-                   saux := pop(p1); // carregando topo da pilha na string auxiliar
-
-                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
-                   if((saux = '/') or (saux = '*') or (saux = '+') or (saux = '-')) then
-                   begin
-                        precedencia := true; //Setando variável de precedência
-                        lista[j] := saux; // Carregando string Auxiliar na pilha
-                        j := j + 1; // Incrementando indice do array
-                   end
-                   else begin
-                        precedencia := false; // Setando false na variável de precedencia
-                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
-                   end;
-                 end;
-
-               until(precedencia = false);
-               // Fim do Laço ----------------
+               nivel := 1; // Setando nivel de precedencia
+               precedencia(nivel); // Chamando função de cálculo de precedência
 
                push(p1, svisor[i]); // Carregando operação na pilha
                saux := ''; // resetando String Auxiliar
 
           end
 
-// ========================================== Operador - ============================================
-          else if(svisor[i] = '-') then
+// ========================================== Operadores  * e / ============================================
+          else if((svisor[i] = '*') or (svisor[i] = '/')) then
           begin
 
                lista[j] := saux; // Carregando valor da String auxiliar na Lista
                j := j + 1; // Incrementando indice do array
 
-               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
-               repeat
-                 if(vazia(p1))then // Verificando se a pilha está vazia
-                 begin
-                      break; // Saindo do laço
-                 end
-
-                 else begin
-
-                   saux := pop(p1); // carregando topo da pilha na string auxiliar
-
-                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
-                   if((saux = '/') or (saux = '*') or (saux = '+') or (saux = '-')) then
-                   begin
-                        precedencia := true; //Setando variável de precedência
-                        lista[j] := saux; // Carregando string Auxiliar na pilha
-                        j := j + 1; // Incrementando indice do array
-                   end
-                   else begin
-                        precedencia := false; // Setando false na variável de precedencia
-                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
-                   end;
-                 end;
-
-               until(precedencia = false);
-               // Fim do Laço ----------------
+               nivel := 2; // Setando nivel de precedencia
+               precedencia(nivel); // Chamando função de cálculo de precedência
 
                push(p1, svisor[i]); // Carregando operação na pilha
                saux := ''; // resetando String Auxiliar
           end
 
-// ========================================== Operador * ============================================
-          else if(svisor[i] = '*') then
-          begin
-
-               lista[j] := saux; // Carregando valor da String auxiliar na Lista
-               j := j + 1; // Incrementando indice do array
-
-               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
-               repeat
-                 if(vazia(p1))then // Verificando se a pilha está vazia
-                 begin
-                      break; // Saindo do laço
-                 end
-
-                 else begin
-
-                   saux := pop(p1); // carregando topo da pilha na string auxiliar
-
-                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
-                   if((saux = '/') or (saux = '*')) then
-                   begin
-                        precedencia := true; //Setando variável de precedência
-                        lista[j] := saux; // Carregando string Auxiliar na pilha
-                        j := j + 1; // Incrementando indice do array
-                   end
-                   else begin
-                        precedencia := false; // Setando false na variável de precedencia
-                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
-                   end;
-                 end;
-
-               until(precedencia = false);
-               // Fim do Laço ----------------
-
-               push(p1, svisor[i]); // Carregando operação na pilha
-               saux := ''; // resetando String Auxiliar
-          end
-
-// ========================================== Operador / ============================================
-          else if(svisor[i] = '/') then
-          begin
-
-               lista[j] := saux; // Carregando valor da String auxiliar na Lista
-               j := j + 1; // Incrementando indice do array
-
-               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
-               repeat
-                 if(vazia(p1))then // Verificando se a pilha está vazia
-                 begin
-                      break; // Saindo do laço
-                 end
-
-                 else begin
-
-                   saux := pop(p1); // carregando topo da pilha na string auxiliar
-
-                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
-                   if((saux = '/') or (saux = '*')) then
-                   begin
-                        precedencia := true; //Setando variável de precedência
-                        lista[j] := saux; // Carregando string Auxiliar na pilha
-                        j := j + 1; // Incrementando indice do array
-                   end
-                   else begin
-                        precedencia := false; // Setando false na variável de precedencia
-                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
-                   end;
-                 end;
-
-               until(precedencia = false);
-               // Fim do Laço ----------------
-
-               push(p1, svisor[i]); // Carregando operação na pilha
-               saux := ''; // resetando String Auxiliar
-          end
-
-// ========================================== Operador ^ ============================================
-          else if( svisor[i] = '^')then
+// ========================================== Operadores ^, ! e ~ ============================================
+          else if((svisor[i] = '^') or (svisor[i] = 'r') or (svisor[i] = '!'))then
           begin
                lista[j] := saux; // Carregando valor da String auxiliar na Lista
                j := j + 1; // Incrementando indice do array
 
-               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
-               repeat
-                 if(vazia(p1))then // Verificando se a pilha está vazia
-                 begin
-                      break; // Saindo do laço
-                 end
-
-                 else begin
-
-                   saux := pop(p1); // carregando topo da pilha na string auxiliar
-
-                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
-                   if(saux = '^') then
-                   begin
-                        precedencia := true; //Setando variável de precedência
-                        lista[j] := saux; // Carregando string Auxiliar na pilha
-                        j := j + 1; // Incrementando indice do array
-                   end
-                   else begin
-                        precedencia := false; // Setando false na variável de precedencia
-                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
-                   end;
-                 end;
-
-               until(precedencia = false);
-               // Fim do Laço ----------------
+               nivel := 3; // Setando nivel de precedencia
+               precedencia(nivel); // Chamando função de cálculo de precedência
 
                push(p1, svisor[i]); // Carregando operação na pilha
-               saux := ''; // resetando String Auxiliar
+               saux := ''; // resetando String Auxiliar  2+s(30)
 
           end
 
-// ========================================== Operador r ============================================
-          else if( svisor[i] = 'r')then
-          begin
-               lista[j] := saux; // Carregando valor da String auxiliar na Lista
-               j := j + 1; // Incrementando indice do array
-
-               // Início do Laço para carregar operadores da pilha com maior precedencia na Lista
-               repeat
-                 if(vazia(p1))then // Verificando se a pilha está vazia
-                 begin
-                      break; // Saindo do laço
-                 end
-
-                 else begin
-
-                   saux := pop(p1); // carregando topo da pilha na string auxiliar
-
-                   // Verificando se o topo da pilha tem uma precedência maior ou igual ao operador esquadrinhado
-                   if(saux = 'r') then
-                   begin
-                        precedencia := true; //Setando variável de precedência
-                        lista[j] := saux; // Carregando string Auxiliar na pilha
-                        j := j + 1; // Incrementando indice do array
-                   end
-                   else begin
-                        precedencia := false; // Setando false na variável de precedencia
-                        push(p1, saux); // Devolvendo operador da string auxiliar para o topo da pilha
-                   end;
-                 end;
-
-               until(precedencia = false);
-               // Fim do Laço ----------------
-
-               push(p1, svisor[i]); // Carregando operação na pilha
-               saux := ''; // resetando String Auxiliar
-
-          end
 // ========================================== ABRE PARÊNTESES ============================================
           else if( svisor[i] = '(')then
           begin
@@ -752,6 +692,10 @@ begin
 //FIM DO BLOCO DE FATIAMENTO -----------------------------------------
 
 //INÍCIO DO BLOCO DE OPERAÇÕES ---------------------------------------
+      {$ASMMODE intel}
+      asm
+       finit // Inicia a FPU
+      end;
       for j := 0 to max do
       begin
           if(lista[j] = 'ERROR')then begin
@@ -776,15 +720,27 @@ begin
           else if(lista[j] = 'r') then begin
                push(p1, FloatToStr(raiz())); // Carrega o resultado na pilha de valores
           end
+          else if(lista[j] = 'sin') then begin
+               push(p1, FloatToStr(seno())); // Carrega o resultado na pilha de valores
+          end
+          else if(lista[j] = 'cos') then begin
+               push(p1, FloatToStr(cosseno())); // Carrega o resultado na pilha de valores
+          end
+          else if(lista[j] = 'tan') then begin
+               push(p1, FloatToStr(tangente())); // Carrega o resultado na pilha de valores
+          end
           else if(lista[j] <> '') then begin
                push(p1, lista[j]);
           end;
       end;
 
 //FIM DO BLOCO DE OPERAÇÕES ---------------------------------------
-     EditVisor.Text := '';
-     for j := 0 to max do EditVisor.Text := EditVisor.Text+lista[j]; // Exibindo resultado
-     //EditVisor.Text := pop(p1); // Exibindo resultado
+      if(CheckBoxPolish.Checked) then
+      begin
+          EditVisor.Text := '';
+          for j := 0 to max do EditVisor.Text := EditVisor.Text+lista[j]; // Exibindo resultado
+      end
+      else EditVisor.Text := pop(p1); // Exibindo resultado
 
 end;
 
